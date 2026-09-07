@@ -17,6 +17,9 @@ app.use('/api', apiRoutes);
 app.get('/health', (req, res) => {
   res.json({ status: 'UP', message: 'SIMRS Backend is Running' });
 });
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'UP', message: 'SIMRS Backend is Running' });
+});
 
 app.listen(PORT, () => {
   console.log(`🚀 SIMRS Server listening on http://localhost:${PORT}`);

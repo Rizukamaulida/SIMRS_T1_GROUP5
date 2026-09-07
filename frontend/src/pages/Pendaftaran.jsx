@@ -9,7 +9,7 @@ export default function Pendaftaran({ onRegistered }) {
 
   const handleLookup = async () => {
     if (nik.length !== 16) {
-      alert('NIK harus 16 digit');
+      alert('NIK harus terdiri dari 16 digit angka.');
       return;
     }
     setLoading(true);
@@ -18,7 +18,7 @@ export default function Pendaftaran({ onRegistered }) {
       const res = await api.post('/patients/lookup', { nik });
       setResult(res.data.data);
     } catch (err) {
-      setErrorMsg(err.response?.data?.error || 'Pasien gagal ditemukan.');
+      setErrorMsg(err.response?.data?.error || 'Pasien gagal ditemukan di SATUSEHAT.');
       setResult(null);
     } finally {
       setLoading(false);
@@ -29,7 +29,7 @@ export default function Pendaftaran({ onRegistered }) {
     if (!result) return;
     try {
       await api.post('/encounters', { patient_id: result.id });
-      alert('Berhasil mendaftarkan antrean poli & generate Encounter SatuSehat!');
+      alert('Berhasil mendaftarkan antrean poli & generate Encounter SATUSEHAT!');
       setResult(null);
       setNik('');
       if (onRegistered) onRegistered();
@@ -39,37 +39,123 @@ export default function Pendaftaran({ onRegistered }) {
   };
 
   return (
-    <div style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: 24 }}>
-      <h3 style={{ margin: '0 0 12px 0' }}>1. Pendaftaran Pasien Rawat Jalan (Lookup SatuSehat)</h3>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-        <input
-          type="text"
-          placeholder="Masukkan 16 Digit NIK Pasien"
-          value={nik}
-          onChange={(e) => setNik(e.target.value)}
-          maxLength={16}
-          style={{ flex: 1, padding: '8px 12px', border: '1px solid #ccc', borderRadius: 4 }}
-        />
+    <div className="card-bright" style={{ marginBottom: '24px' }}>
+      <div className="card-title">
+        <div className="card-title-icon">
+          <i className="fas fa-id-card" />
+        </div>
+        <div>
+          <span>1. Pendaftaran Pasien Rawat Jalan</span>
+          <span style={{ display: 'block', fontSize: '12px', fontWeight: '500', color: '#64748b' }}>
+            Lookup Pasien via SATUSEHAT NIK Kemenkes
+          </span>
+        </div>
+      </div>
+
+      <div className="pendaftaran-form-group">
+        <div style={{ flex: 1, position: 'relative' }}>
+          <i className="fas fa-user-check" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#0284c7' }} />
+          <input
+            type="text"
+            placeholder="Masukkan 16 Digit NIK Pasien (contoh: 3171...)"
+            value={nik}
+            onChange={(e) => setNik(e.target.value.replace(/\D/g, ''))}
+            maxLength={16}
+            className="input-bright"
+            style={{ paddingLeft: '38px', letterSpacing: '0.5px' }}
+          />
+        </div>
         <button
           onClick={handleLookup}
-          disabled={loading}
-          style={{ padding: '8px 16px', background: '#0284c7', color: '#fff', border: 'none', borderRadius: 4, cursor: 'pointer' }}
+          disabled={loading || nik.length !== 16}
+          className="btn btn-primary"
         >
-          {loading ? 'Mengecek ke SATUSEHAT...' : 'Cari NIK'}
+          {loading ? (
+            <>
+              <i className="fas fa-spinner fa-spin" />
+              Mengecek...
+            </>
+          ) : (
+            <>
+              <i className="fas fa-search" />
+              Cari NIK
+            </>
+          )}
         </button>
       </div>
 
-      {errorMsg && <div style={{ color: '#dc2626', fontSize: 13, marginBottom: 8 }}>{errorMsg}</div>}
+      {errorMsg && (
+        <div style={{
+          background: '#ffe4e6',
+          color: '#be123c',
+          padding: '10px 14px',
+          borderRadius: '8px',
+          fontSize: '13px',
+          marginBottom: '14px',
+          border: '1px solid #fca5a5',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <i className="fas fa-exclamation-circle" />
+          {errorMsg}
+        </div>
+      )}
 
       {result && (
-        <div style={{ background: '#f8fafc', padding: 14, borderRadius: 6, border: '1px solid #e2e8f0' }}>
-          <p style={{ margin: '4px 0' }}><strong>Nama:</strong> {result.name}</p>
-          <p style={{ margin: '4px 0' }}><strong>Tgl Lahir / Gender:</strong> {result.birth_date} / {result.gender}</p>
-          <p style={{ margin: '4px 0' }}><strong>SatuSehat IHS ID:</strong> <code>{result.satusehat_ihs_id}</code></p>
+        <div style={{
+          background: '#f0f9ff',
+          padding: '16px',
+          borderRadius: '12px',
+          border: '1.5px solid #bae6fd',
+          marginTop: '14px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+            <div style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '50%',
+              background: '#0284c7',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '18px',
+              fontWeight: '700'
+            }}>
+              {result.name ? result.name.charAt(0) : 'P'}
+            </div>
+            <div style={{ flex: 1 }}>
+              <h4 style={{ margin: 0, fontSize: '15px', color: '#0f172a' }}>{result.name}</h4>
+              <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: '#64748b' }}>
+                Tgl Lahir: <strong>{result.birth_date || '-'}</strong> | Gender: <strong>{result.gender || '-'}</strong>
+              </p>
+            </div>
+          </div>
+
+          <div style={{
+            background: '#ffffff',
+            padding: '8px 12px',
+            borderRadius: '6px',
+            fontSize: '12px',
+            marginBottom: '14px',
+            border: '1px solid #e2e8f0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <span style={{ color: '#64748b', fontWeight: '600' }}>SATUSEHAT IHS ID:</span>
+            <code style={{ background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '4px', fontWeight: '700' }}>
+              {result.satusehat_ihs_id || 'Generating...'}
+            </code>
+          </div>
+
           <button
             onClick={handleCreateEncounter}
-            style={{ marginTop: 10, background: '#16a34a', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 4, cursor: 'pointer' }}
+            className="btn btn-success"
+            style={{ width: '100%' }}
           >
+            <i className="fas fa-user-plus" />
             + Masukkan ke Antrean Poli & Buat Encounter
           </button>
         </div>
