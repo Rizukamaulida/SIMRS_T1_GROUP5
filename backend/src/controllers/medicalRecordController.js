@@ -101,4 +101,4 @@ export function saveMedicalRecord(req, res) {
       res.status(201).json({ id: this.lastID, message: 'Rekam medis berhasil disimpan secara lokal' });
     }
   );
-}
+}
