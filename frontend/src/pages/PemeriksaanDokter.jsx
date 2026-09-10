@@ -207,53 +207,56 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
         </div>
       </div>
 
-      {/* Block 2: Pemeriksaan Fisik */}
-      <div style={{ marginBottom: '24px' }}>
-        <h5 style={{ fontSize: '14px', color: '#0284c7', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px', marginBottom: '14px' }}>
-          <i className="fas fa-stethoscope" style={{ marginRight: '8px' }} />
-          Pemeriksaan Fisik & Psikologis
-        </h5>
+      {/* Block 2 & 3: Pemeriksaan Fisik & Diagnosis */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '24px' }}>
+        {/* Block 2: Pemeriksaan Fisik */}
         <div>
-          <Label required>Hasil Pemeriksaan Fisik / Objektif / Psikologis</Label>
-          <textarea className="input-bright" rows={4} value={pemeriksaanFisik} onChange={e => setPemeriksaanFisik(e.target.value)} placeholder="Tuliskan TTV, kesadaran, serta hasil pemeriksaan bagian tubuh..." />
-        </div>
-      </div>
-
-      {/* Block 3: Diagnosis (ICD-10) */}
-      <div style={{ marginBottom: '24px' }}>
-        <h5 style={{ fontSize: '14px', color: '#0284c7', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px', marginBottom: '14px' }}>
-          <i className="fas fa-clipboard-check" style={{ marginRight: '8px' }} />
-          Diagnosis Dokter (ICD-10)
-        </h5>
-        
-        {/* ICD Targeter/Buffer */}
-        <div style={{ marginBottom: '12px' }}>
-          <Icd10Search onSelect={(item) => handleAddDiagnosisToBuffer(item)} />
-        </div>
-
-        {selectedDiagnoses.length > 0 ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <Label required>Diagnosis Terpilih (akan dikirim ke SATUSEHAT)</Label>
-            {selectedDiagnoses.map((d, index) => (
-              <div key={index} style={{
-                background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '8px 12px', borderRadius: '6px',
-                fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'
-              }}>
-                <div>
-                  <span style={{ background: '#15803d', color: '#fff', padding: '2px 6px', borderRadius: '4px', marginRight: '8px', fontWeight: '700' }}>
-                    {d.code}
-                  </span>
-                  {d.display}
-                </div>
-                <button onClick={() => handleRemoveDiagnosis(d.code)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }}>
-                  <i className="fas fa-times-circle" />
-                </button>
-              </div>
-            ))}
+          <h5 style={{ fontSize: '14px', color: '#0284c7', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px', marginBottom: '14px' }}>
+            <i className="fas fa-stethoscope" style={{ marginRight: '8px' }} />
+            Pemeriksaan Fisik & Psikologis
+          </h5>
+          <div>
+            <Label required>Hasil Pemeriksaan Fisik / Objektif / Psikologis</Label>
+            <textarea className="input-bright" rows={4} value={pemeriksaanFisik} onChange={e => setPemeriksaanFisik(e.target.value)} placeholder="Tuliskan TTV, kesadaran, serta hasil pemeriksaan bagian tubuh..." />
           </div>
-        ) : (
-           <div style={{ fontSize: '12px', color: '#ef4444', fontStyle: 'italic' }}>* Anda belum menambahkan diagnosis. Silakan cari dan pilih dari form ICD-10 di atas.</div>
-        )}
+        </div>
+
+        {/* Block 3: Diagnosis (ICD-10) */}
+        <div>
+          <h5 style={{ fontSize: '14px', color: '#0284c7', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px', marginBottom: '14px' }}>
+            <i className="fas fa-clipboard-check" style={{ marginRight: '8px' }} />
+            Diagnosis Dokter (ICD-10)
+          </h5>
+          
+          {/* ICD Targeter/Buffer */}
+          <div style={{ marginBottom: '12px' }}>
+            <Icd10Search onSelect={(item) => handleAddDiagnosisToBuffer(item)} />
+          </div>
+
+          {selectedDiagnoses.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Label required>Diagnosis Terpilih (akan dikirim ke SATUSEHAT)</Label>
+              {selectedDiagnoses.map((d, index) => (
+                <div key={index} style={{
+                  background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '8px 12px', borderRadius: '6px',
+                  fontSize: '13px', display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+                }}>
+                  <div>
+                    <span style={{ background: '#15803d', color: '#fff', padding: '2px 6px', borderRadius: '4px', marginRight: '8px', fontWeight: '700' }}>
+                      {d.code}
+                    </span>
+                    {d.display}
+                  </div>
+                  <button onClick={() => handleRemoveDiagnosis(d.code)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }}>
+                    <i className="fas fa-times-circle" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+             <div style={{ fontSize: '12px', color: '#ef4444', fontStyle: 'italic' }}>* Anda belum menambahkan diagnosis. Silakan cari dan pilih dari form ICD-10 di atas.</div>
+          )}
+        </div>
       </div>
 
       {/* Block 4: Catatan Dokter (Tindakan & Resep) */}
@@ -263,42 +266,44 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
           Catatan Dokter: Tindakan & Resep
         </h5>
         
-        {/* Tindakan Toggle */}
-        <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', color: '#334155' }}>
-            <input 
-              type="checkbox" 
-              checked={isPermintaanTindakan} 
-              onChange={e => setIsPermintaanTindakan(e.target.checked)} 
-              style={{ width: '16px', height: '16px' }}
-            />
-            Memerlukan Permintaan Tindakan (Lab, Radiologi, Bedah, dll)
-          </label>
-          
-          {isPermintaanTindakan && (
-            <div style={{ marginTop: '10px', marginLeft: '24px', paddingLeft: '12px', borderLeft: '2px solid #e2e8f0' }}>
-               <textarea className="input-bright" rows={2} value={permintaanTindakan} onChange={e => setPermintaanTindakan(e.target.value)} placeholder="Tuliskan jenis/rincian tindakan yang diminta..." />
-            </div>
-          )}
-        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          {/* Tindakan Toggle */}
+          <div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', color: '#334155' }}>
+              <input 
+                type="checkbox" 
+                checked={isPermintaanTindakan} 
+                onChange={e => setIsPermintaanTindakan(e.target.checked)} 
+                style={{ width: '16px', height: '16px' }}
+              />
+              Memerlukan Permintaan Tindakan (Lab, Radiologi, Bedah, dll)
+            </label>
+            
+            {isPermintaanTindakan && (
+              <div style={{ marginTop: '10px', marginLeft: '24px', paddingLeft: '12px', borderLeft: '2px solid #e2e8f0' }}>
+                 <textarea className="input-bright" rows={3} value={permintaanTindakan} onChange={e => setPermintaanTindakan(e.target.value)} placeholder="Tuliskan jenis/rincian tindakan yang diminta..." />
+              </div>
+            )}
+          </div>
 
-        {/* Resep Toggle */}
-        <div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', color: '#334155' }}>
-            <input 
-              type="checkbox" 
-              checked={isResepObat} 
-              onChange={e => setIsResepObat(e.target.checked)} 
-              style={{ width: '16px', height: '16px' }}
-            />
-            Memerlukan Resep Obat (Farmasi)
-          </label>
-          
-          {isResepObat && (
-            <div style={{ marginTop: '10px', marginLeft: '24px', paddingLeft: '12px', borderLeft: '2px solid #e2e8f0' }}>
-               <textarea className="input-bright" rows={3} value={resepObat} onChange={e => setResepObat(e.target.value)} placeholder="R/ Para 500mg No. X\nS 3 dd 1 p.c\n\nTuliskan resep obat secara berurutan..." />
-            </div>
-          )}
+          {/* Resep Toggle */}
+          <div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', color: '#334155' }}>
+              <input 
+                type="checkbox" 
+                checked={isResepObat} 
+                onChange={e => setIsResepObat(e.target.checked)} 
+                style={{ width: '16px', height: '16px' }}
+              />
+              Memerlukan Resep Obat (Farmasi)
+            </label>
+            
+            {isResepObat && (
+              <div style={{ marginTop: '10px', marginLeft: '24px', paddingLeft: '12px', borderLeft: '2px solid #e2e8f0' }}>
+                 <textarea className="input-bright" rows={3} value={resepObat} onChange={e => setResepObat(e.target.value)} placeholder="R/ Para 500mg No. X\nS 3 dd 1 p.c\n\nTuliskan resep obat secara berurutan..." />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

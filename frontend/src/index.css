@@ -185,6 +185,7 @@ body {
   color: var(--text-main);
   transition: all 0.2s ease;
   outline: none;
+  resize: vertical;
 }
 
 .input-bright:focus {
