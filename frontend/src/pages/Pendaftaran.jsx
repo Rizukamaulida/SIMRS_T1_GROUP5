@@ -39,13 +39,13 @@ export default function Pendaftaran({ onRegistered }) {
   };
 
   return (
-    <div className="card-bright" style={{ marginBottom: '24px' }}>
+    <div className="card-bright" style={{ height: '100%' }}>
       <div className="card-title">
         <div className="card-title-icon">
           <i className="fas fa-id-card" />
         </div>
         <div>
-          <span>1. Pendaftaran Pasien Rawat Jalan</span>
+          <span>Pendaftaran Pasien Rawat Jalan</span>
           <span style={{ display: 'block', fontSize: '12px', fontWeight: '500', color: '#64748b' }}>
             Lookup Pasien via SATUSEHAT NIK Kemenkes
           </span>

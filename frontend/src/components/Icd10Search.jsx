@@ -19,10 +19,7 @@ export default function Icd10Search({ onSelect }) {
     item.display.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleChipClick = (item) => {
-    setSelectedCode(item.code);
-    onSelect(item);
-  };
+
 
   return (
     <div style={{ marginTop: '14px' }}>
@@ -31,20 +28,7 @@ export default function Icd10Search({ onSelect }) {
         Pilih Diagnosa Primer (ICD-10):
       </label>
 
-      {/* Quick Selection Chips */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
-        {COMMON_ICD10.map((item) => (
-          <button
-            key={item.code}
-            type="button"
-            className={`quick-chip ${selectedCode === item.code ? 'active' : ''}`}
-            onClick={() => handleChipClick(item)}
-          >
-            <i className="fas fa-plus-circle" style={{ fontSize: '11px' }} />
-            {item.tag} ({item.code})
-          </button>
-        ))}
-      </div>
+
 
       {/* Filter Input */}
       <div style={{ position: 'relative', marginBottom: '8px' }}>

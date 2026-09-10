@@ -78,11 +78,16 @@ body {
   margin: 0 auto;
 }
 
-/* Main Responsive Grid Layout */
-.app-main-grid {
+/* Top Section Grid Layout (Pendaftaran Left, Antrean Poli Right) */
+.app-top-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
+  width: 100%;
+  align-items: start;
+}
+
+.app-bottom-section {
   width: 100%;
 }
 
@@ -349,7 +354,7 @@ body {
    ========================================================= */
 
 @media (max-width: 960px) {
-  .app-main-grid {
+  .app-top-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }

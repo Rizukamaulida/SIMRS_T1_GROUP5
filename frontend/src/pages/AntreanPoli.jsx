@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import SyncBadge from '../components/SyncBadge';
+import { formatPatientName } from '../utils/formatters';
 
 export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refreshKey }) {
   const [encounters, setEncounters] = useState([]);
@@ -23,14 +24,14 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
   }, [refreshKey]);
 
   return (
-    <div className="card-bright">
+    <div className="card-bright" style={{ height: '100%' }}>
       <div className="card-title">
         <div className="card-title-icon">
           <i className="fas fa-list-ol" />
         </div>
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <span>2. Antrean Poli & Status Encounter</span>
+            <span>Antrean Poli & Status Encounter</span>
             <span style={{ display: 'block', fontSize: '12px', fontWeight: '500', color: '#64748b' }}>
               Daftar Kunjungan Pasien Hari Ini
             </span>
@@ -52,7 +53,6 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
         <table className="table-bright">
           <thead>
             <tr>
-              <th style={{ width: '45px' }}>ID</th>
               <th style={{ whiteSpace: 'nowrap' }}>Pasien & NIK</th>
               <th style={{ whiteSpace: 'nowrap' }}>Status</th>
               <th style={{ whiteSpace: 'nowrap' }}>SATUSEHAT</th>
@@ -62,14 +62,14 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
           <tbody>
             {loading && encounters.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: '24px', textAlign: 'center', color: '#64748b' }}>
+                <td colSpan={4} style={{ padding: '24px', textAlign: 'center', color: '#64748b' }}>
                   <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }} />
                   Memuat data antrean poli...
                 </td>
               </tr>
             ) : encounters.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: '36px', textAlign: 'center', color: '#94a3b8' }}>
+                <td colSpan={4} style={{ padding: '36px', textAlign: 'center', color: '#94a3b8' }}>
                   <i className="fas fa-user-clock" style={{ fontSize: '32px', marginBottom: '8px', color: '#cbd5e1', display: 'block' }} />
                   Belum ada antrean kunjungan pasien.
                 </td>
@@ -79,9 +79,8 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
                 const isSelected = selectedEncounter && selectedEncounter.id === enc.id;
                 return (
                   <tr key={enc.id} className={isSelected ? 'active-row' : ''}>
-                    <td style={{ fontWeight: '700', color: '#0284c7' }}>#{enc.id}</td>
                     <td>
-                      <div style={{ fontWeight: '700', color: '#0f172a' }}>{enc.patient_name}</div>
+                      <div style={{ fontWeight: '700', color: '#0f172a' }}>{formatPatientName(enc.patient_name, enc.nik)}</div>
                       <div style={{ fontSize: '11px', color: '#64748b' }}>NIK: {enc.nik}</div>
                     </td>
                     <td>
@@ -112,7 +111,7 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
                             background: isSelected ? '#0369a1' : undefined
                           }}
                         >
-                          <i className="fas fa-user-md" />
+                          <i className="fas fa-user-md" style={{ marginRight: '6px' }} />
                           {isSelected ? 'Sedang Diperiksa' : 'Periksa'}
                         </button>
                       ) : (

@@ -71,10 +71,10 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Grid Layout */}
-      <main className="app-main-grid">
-        {/* Left Column: Pendaftaran & Antrean Poli */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Main Layout */}
+      <main style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {/* Top Section: Pendaftaran (Left) & Antrean Poli (Right) */}
+        <div className="app-top-grid">
           <Pendaftaran onRegistered={triggerRefresh} />
           <AntreanPoli
             refreshKey={refreshKey}
@@ -83,8 +83,8 @@ export default function App() {
           />
         </div>
 
-        {/* Right Column: Rekam Medis Elektronik (RME) */}
-        <div>
+        {/* Bottom Section: Rekam Medis Elektronik (RME) */}
+        <div className="app-bottom-section">
           <PemeriksaanDokter
             encounter={activeEncounter}
             onFinished={() => {

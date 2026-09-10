@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import Icd10Search from '../components/Icd10Search';
+import { formatPatientName } from '../utils/formatters';
 
 export default function PemeriksaanDokter({ encounter, onFinished }) {
   // State: Anamnesis
@@ -43,7 +44,7 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
           <i className="fas fa-notes-medical" />
         </div>
         <h4 style={{ color: '#0f172a', margin: '0 0 6px 0', fontSize: '16px' }}>Rekam Medis Elektronik (RME)</h4>
-        <p style={{ fontSize: '13px', margin: 0, color: '#64748b', maxWidth: '300px', margin: '0 auto' }}>
+        <p style={{ fontSize: '13px', color: '#64748b', maxWidth: '300px', margin: '0 auto' }}>
           Silakan pilih satu pasien di tabel antrean untuk mulai memeriksa & menginput data rekam medis.
         </p>
       </div>
@@ -148,7 +149,7 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
           <i className="fas fa-file-medical" />
         </div>
         <div>
-          <span>3. Rekam Medis Elektronik (RME)</span>
+          <span>Rekam Medis Elektronik (RME)</span>
           <span style={{ display: 'block', fontSize: '12px', fontWeight: '500', color: '#64748b' }}>
             Lengkapi data sebelum menyelesaikan pemeriksaan
           </span>
@@ -159,17 +160,11 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
       <div style={{
         background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '16px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a' }}>
             <i className="fas fa-user-injured" style={{ color: '#0284c7', marginRight: '6px' }} />
-            {encounter.patient_name}
+            {formatPatientName(encounter.patient_name, encounter.nik)}
           </div>
-          <span style={{ background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: '700' }}>
-            Kunjungan #{encounter.id}
-          </span>
-        </div>
-        <div style={{ fontSize: '12px', color: '#475569', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <div>IHS Patient ID: <strong style={{ color: '#0f172a' }}>{encounter.patient_ihs_id || 'Pending'}</strong></div>
         </div>
       </div>
 
