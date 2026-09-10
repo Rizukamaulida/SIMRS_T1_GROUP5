@@ -48,3 +48,57 @@ export function addDiagnosis(req, res) {
     );
   });
 }
+
+export function saveMedicalRecord(req, res) {
+  const {
+    encounter_id,
+    anamnesis_keluhan_utama,
+    anamnesis_keluhan_penyerta,
+    anamnesis_alergi,
+    anamnesis_riwayat_pribadi,
+    anamnesis_riwayat_keluarga,
+    anamnesis_riwayat_pengobatan,
+    pemeriksaan_fisik_psikologis,
+    catatan_permintaan_tindakan,
+    catatan_resep_obat
+  } = req.body;
+
+  if (!encounter_id) {
+    return res.status(400).json({ error: 'encounter_id wajib diisi' });
+  }
+
+  const query = `
+    INSERT INTO medical_records (
+      encounter_id,
+      anamnesis_keluhan_utama,
+      anamnesis_keluhan_penyerta,
+      anamnesis_alergi,
+      anamnesis_riwayat_pribadi,
+      anamnesis_riwayat_keluarga,
+      anamnesis_riwayat_pengobatan,
+      pemeriksaan_fisik_psikologis,
+      catatan_permintaan_tindakan,
+      catatan_resep_obat
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.run(
+    query,
+    [
+      encounter_id,
+      anamnesis_keluhan_utama || null,
+      anamnesis_keluhan_penyerta || null,
+      anamnesis_alergi || null,
+      anamnesis_riwayat_pribadi || null,
+      anamnesis_riwayat_keluarga || null,
+      anamnesis_riwayat_pengobatan || null,
+      pemeriksaan_fisik_psikologis || null,
+      catatan_permintaan_tindakan || null,
+      catatan_resep_obat || null
+    ],
+    function (err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.status(201).json({ id: this.lastID, message: 'Rekam medis berhasil disimpan secara lokal' });
+    }
+  );
+}
