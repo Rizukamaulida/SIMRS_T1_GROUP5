@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import SyncBadge from '../components/SyncBadge';
-import { formatPatientName } from '../utils/formatters';
+
 
 export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refreshKey }) {
   const [encounters, setEncounters] = useState([]);
@@ -49,7 +49,7 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
         </div>
       </div>
 
-      <div className="table-container">
+      <div className="table-container" style={{ maxHeight: '380px', overflowY: 'auto' }}>
         <table className="table-bright">
           <thead>
             <tr>
@@ -80,7 +80,7 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
                 return (
                   <tr key={enc.id} className={isSelected ? 'active-row' : ''}>
                     <td>
-                      <div style={{ fontWeight: '700', color: '#0f172a' }}>{formatPatientName(enc.patient_name, enc.nik)}</div>
+                      <div style={{ fontWeight: '700', color: '#0f172a' }}>{enc.patient_name || 'Pasien Rawat Jalan'}</div>
                       <div style={{ fontSize: '11px', color: '#64748b' }}>NIK: {enc.nik}</div>
                     </td>
                     <td>

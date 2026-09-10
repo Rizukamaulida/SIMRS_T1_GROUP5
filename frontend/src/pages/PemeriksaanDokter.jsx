@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../services/api';
 import Icd10Search from '../components/Icd10Search';
-import { formatPatientName } from '../utils/formatters';
+
 
 export default function PemeriksaanDokter({ encounter, onFinished }) {
   // State: Anamnesis
@@ -163,7 +163,7 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontWeight: '700', fontSize: '15px', color: '#0f172a' }}>
             <i className="fas fa-user-injured" style={{ color: '#0284c7', marginRight: '6px' }} />
-            {formatPatientName(encounter.patient_name, encounter.nik)}
+            {encounter.patient_name || 'Pasien Rawat Jalan'}
           </div>
         </div>
       </div>
