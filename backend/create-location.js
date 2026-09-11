@@ -25,12 +25,12 @@ async function createDummyLocation() {
     identifier: [
       {
         system: `http://sys-ids.kemkes.go.id/location/${process.env.SATUSEHAT_ORG_ID}`,
-        value: "POLI-UMUM-01"
+        value: "Ruang Pemeriksaan Poli 1"
       }
     ],
     status: "active",
-    name: "Ruang Pemeriksaan Poli Umum 1",
-    description: "Ruang Poli Umum untuk Testing Staging",
+    name: "Ruang Pemeriksaan Poli 1",
+    description: "Ruang Pemeriksaan Poli 1 untuk Testing Staging",
     mode: "instance",
     telecom: [
       {

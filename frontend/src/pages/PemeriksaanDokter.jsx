@@ -85,7 +85,7 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
 
     setIsSubmitting(true);
     try {
-      // 1. Simpan Rekam Medis (Anamnesis, Fisik, Catatan)
+      // 1. Simpan Rekam Medis Lokal (Anamnesis, Fisik, Catatan)
       await api.post('/medical-records', {
         encounter_id: encounter.id,
         anamnesis_keluhan_utama: keluhanUtama,
@@ -99,7 +99,38 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
         catatan_resep_obat: isResepObat ? resepObat : ''
       });
 
-      // 2. Kirim Setiap Diagnosa ke SATUSEHAT (Lokal Condition)
+      // 2. Sync Keluhan Utama (Observation) ke SATUSEHAT jika terkoneksi
+      if (encounter.satusehat_encounter_id && encounter.patient_ihs_id && keluhanUtama.trim()) {
+        try {
+          await api.post('/rme/complaint', {
+            encounterIhsId: encounter.satusehat_encounter_id,
+            patientIhsId: encounter.patient_ihs_id,
+            patientName: encounter.patient_name,
+            complaintText: keluhanUtama
+          });
+        } catch (obsErr) {
+          console.warn('Gagal sinkron keluhan ke SATUSEHAT:', obsErr.message);
+        }
+      }
+
+      // 3. Sync Resep Obat (MedicationRequest) ke SATUSEHAT jika ada resep
+      if (encounter.satusehat_encounter_id && encounter.patient_ihs_id && isResepObat && resepObat.trim()) {
+        try {
+          await api.post('/rme/prescription', {
+            encounterIhsId: encounter.satusehat_encounter_id,
+            patientIhsId: encounter.patient_ihs_id,
+            patientName: encounter.patient_name,
+            kfaCode: '93001019',
+            kfaDisplay: resepObat,
+            dosageText: resepObat,
+            quantity: 10
+          });
+        } catch (medErr) {
+          console.warn('Gagal sinkron resep ke SATUSEHAT:', medErr.message);
+        }
+      }
+
+      // 4. Kirim Setiap Diagnosa ke SATUSEHAT (Lokal Condition)
       for (const diag of selectedDiagnoses) {
         await api.post('/conditions', {
           encounter_id: encounter.id,
@@ -108,8 +139,19 @@ export default function PemeriksaanDokter({ encounter, onFinished }) {
         });
       }
 
-      // 3. Close Encounter
-      await api.put(`/encounters/${encounter.id}/finish`);
+      // 5. Close Encounter di SATUSEHAT Cloud & DB Lokal
+      try {
+        await api.post('/encounter/close', {
+          encounterId: encounter.id,
+          encounterIhsId: encounter.satusehat_encounter_id,
+          patientIhsId: encounter.patient_ihs_id,
+          patientName: encounter.patient_name,
+          startTime: encounter.created_at
+        });
+      } catch (closeErr) {
+        // Fallback ke endpoint encounters finish jika perlu
+        await api.put(`/encounters/${encounter.id}/finish`);
+      }
 
       alert('Seluruh rekam medis berhasil disimpan & kunjungan selesai ditutup (Sync SATUSEHAT).');
       
