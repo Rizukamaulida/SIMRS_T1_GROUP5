@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 import SyncBadge from '../components/SyncBadge';
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
 export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refreshKey }) {
   const [encounters, setEncounters] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -13,7 +17,11 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
       const res = await api.get('/encounters');
       setEncounters(res.data);
     } catch (err) {
+<<<<<<< HEAD
       console.error(err);
+=======
+      console.error('Gagal mengambil data antrean:', err);
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
     } finally {
       setLoading(false);
     }
@@ -49,7 +57,11 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
         </div>
       </div>
 
+<<<<<<< HEAD
       <div className="table-container">
+=======
+      <div className="table-container" style={{ maxHeight: '380px', overflowY: 'auto' }}>
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
         <table className="table-bright">
           <thead>
             <tr>
@@ -77,6 +89,7 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
             ) : (
               encounters.map((enc) => {
                 const isSelected = selectedEncounter && selectedEncounter.id === enc.id;
+<<<<<<< HEAD
                 // Cek status persis seperti CONNECT: backend bisa menulis 'FINISHED' (dari /api/encounter/close)
                 // ATAU 'finished' (dari /api/encounters/:id/finish) tergantung rute yang dipakai.
                 const isFinished = enc.status === 'FINISHED' || enc.status === 'finished';
@@ -84,6 +97,12 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
                   <tr key={enc.id} className={isSelected ? 'active-row' : ''}>
                     <td>
                       <div style={{ fontWeight: '700', color: '#0f172a' }}>{enc.patient_name}</div>
+=======
+                return (
+                  <tr key={enc.id} className={isSelected ? 'active-row' : ''}>
+                    <td>
+                      <div style={{ fontWeight: '700', color: '#0f172a' }}>{enc.patient_name || 'Pasien Rawat Jalan'}</div>
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
                       <div style={{ fontSize: '11px', color: '#64748b' }}>NIK: {enc.nik}</div>
                     </td>
                     <td>
@@ -94,8 +113,13 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
                         fontSize: '11px',
                         fontWeight: '700',
                         textTransform: 'uppercase',
+<<<<<<< HEAD
                         background: isFinished ? '#e2e8f0' : '#dbeafe',
                         color: isFinished ? '#475569' : '#1d4ed8'
+=======
+                        background: enc.status === 'finished' ? '#e2e8f0' : '#dbeafe',
+                        color: enc.status === 'finished' ? '#475569' : '#1d4ed8'
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
                       }}>
                         {enc.status}
                       </span>
@@ -104,10 +128,17 @@ export default function AntreanPoli({ onSelectEncounter, selectedEncounter, refr
                       <SyncBadge status={enc.sync_status} ihsId={enc.satusehat_encounter_id} />
                     </td>
                     <td style={{ textAlign: 'right' }}>
+<<<<<<< HEAD
                       {!isFinished ? (
                         <button
                           onClick={() => onSelectEncounter(enc)}
                           className="btn btn-primary"
+=======
+                      {enc.status !== 'finished' ? (
+                        <button
+                          onClick={() => onSelectEncounter(enc)}
+                          className={`btn ${isSelected ? 'btn-primary' : 'btn-primary'}`}
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
                           style={{
                             padding: '5px 12px',
                             fontSize: '12px',

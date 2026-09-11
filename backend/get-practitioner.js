@@ -46,4 +46,8 @@ async function findPractitioner() {
   }
 }
 
+<<<<<<< HEAD
 findPractitioner();
+=======
+findPractitioner();
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734

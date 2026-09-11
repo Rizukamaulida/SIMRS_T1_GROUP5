@@ -84,6 +84,7 @@ export async function sendEncounterToSatuSehat({ patientIhsId, patientName, star
   }
 }
 
+<<<<<<< HEAD
 // backend/src/services/fhirEncounter.js
 
 // backend/src/services/fhirEncounter.js
@@ -92,6 +93,12 @@ export async function updateEncounterStatusFinished(encounterIhsId, patientIhsId
   try {
     const token = await getAccessToken();
 
+=======
+export async function updateEncounterStatusFinished(encounterIhsId, patientIhsId, patientName, startTime) {
+  try {
+    const token = await getAccessToken();
+
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
     // 1. Ambil data Encounter asli dari SATUSEHAT untuk mendapatkan period.start yang valid
     const existing = await axios.get(
       `${SATUSEHAT_CONFIG.fhirUrl}/Encounter/${encounterIhsId}`,

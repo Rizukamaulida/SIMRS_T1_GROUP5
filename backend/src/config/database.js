@@ -56,6 +56,25 @@ db.serialize(() => {
       FOREIGN KEY (encounter_id) REFERENCES encounters(id)
     )
   `);
+
+  // Tabel Rekam Medis / Hasil Pemeriksaan Fisik dan Anamnesis
+  db.run(`
+    CREATE TABLE IF NOT EXISTS medical_records (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      encounter_id INTEGER NOT NULL,
+      anamnesis_keluhan_utama TEXT,
+      anamnesis_keluhan_penyerta TEXT,
+      anamnesis_alergi TEXT,
+      anamnesis_riwayat_pribadi TEXT,
+      anamnesis_riwayat_keluarga TEXT,
+      anamnesis_riwayat_pengobatan TEXT,
+      pemeriksaan_fisik_psikologis TEXT,
+      catatan_permintaan_tindakan TEXT,
+      catatan_resep_obat TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (encounter_id) REFERENCES encounters(id)
+    )
+  `);
 });
 
 export default db;

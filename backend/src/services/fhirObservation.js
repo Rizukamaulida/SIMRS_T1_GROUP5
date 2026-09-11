@@ -59,4 +59,8 @@ export async function sendObservationComplaintToSatuSehat({ encounterIhsId, pati
     }
     throw error;
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734

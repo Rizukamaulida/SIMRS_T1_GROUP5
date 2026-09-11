@@ -14,7 +14,11 @@ export default function App() {
   const triggerRefresh = () => setRefreshKey((prev) => prev + 1);
 
   useEffect(() => {
+<<<<<<< HEAD
     // Cek status backend via endpoint /health (sudah tersedia di server.js CONNECT)
+=======
+    // Check backend health status on mount
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
     axios.get('http://localhost:5000/health')
       .then(() => setServerHealth('ONLINE'))
       .catch(() => {
@@ -26,7 +30,11 @@ export default function App() {
 
   return (
     <div className="app-container">
+<<<<<<< HEAD
       {/* Header Banner (visual UI/UX) */}
+=======
+      {/* App Glassmorphic Banner Header */}
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
       <header className="app-header">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <div>
@@ -74,6 +82,10 @@ export default function App() {
 
       {/* Main Layout */}
       <main style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+<<<<<<< HEAD
+=======
+        {/* Top Section: Pendaftaran (Left) & Antrean Poli (Right) */}
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
         <div className="app-top-grid">
           <Pendaftaran onRegistered={triggerRefresh} />
           <AntreanPoli
@@ -83,6 +95,10 @@ export default function App() {
           />
         </div>
 
+<<<<<<< HEAD
+=======
+        {/* Bottom Section: Rekam Medis Elektronik (RME) */}
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
         <div className="app-bottom-section">
           <PemeriksaanDokter
             encounter={activeEncounter}

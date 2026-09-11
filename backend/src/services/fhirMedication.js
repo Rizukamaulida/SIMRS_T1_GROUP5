@@ -45,7 +45,10 @@ export async function sendMedicationRequestToSatuSehat({
       {
         resourceType: "Medication",
         id: medLocalId,
+<<<<<<< HEAD
         // Rule 10380: Identifier item obat
+=======
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
         identifier: [
           {
             system: `http://sys-ids.kemkes.go.id/medication/${SATUSEHAT_CONFIG.organizationId}`,
@@ -63,7 +66,10 @@ export async function sendMedicationRequestToSatuSehat({
           ]
         },
         status: "active",
+<<<<<<< HEAD
         // Rule 10031: Extension MedicationType (NC = Non-compound / Non-racikan)
+=======
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
         extension: [
           {
             url: "https://fhir.kemkes.go.id/r4/StructureDefinition/MedicationType",
@@ -149,4 +155,8 @@ export async function sendMedicationRequestToSatuSehat({
     }
     throw error;
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e41d4bdb8d134e2706a0a35ff157eaea5854b734
