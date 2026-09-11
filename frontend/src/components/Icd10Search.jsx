@@ -1,34 +1,82 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-// Contoh list master ICD-10 primer umum
-const COMMON_ICD10 = [
-  { code: 'A09', display: 'Infectious gastroenteritis and colitis, unspecified' },
-  { code: 'J00', display: 'Acute nasopharyngitis [common cold]' },
-  { code: 'I10', display: 'Essential (primary) hypertension' },
-  { code: 'E11.9', display: 'Type 2 diabetes mellitus without complications' },
-  { code: 'R50.9', display: 'Fever, unspecified' },
-  { code: 'K29.7', display: 'Gastritis, unspecified' }
-];
+export default function Icd10Search({ onSelect, value }) {
+  const [icd10List, setIcd10List] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-export default function Icd10Search({ onSelect }) {
+  useEffect(() => {
+    fetch('/icd10.json')
+      .then((res) => {
+        if (!res.ok) throw new Error('Gagal memuat /icd10.json');
+        return res.json();
+      })
+      .then((data) => setIcd10List(Array.isArray(data) ? data : []))
+      .catch((err) => {
+        console.error('Gagal memuat daftar ICD-10:', err);
+        setLoadError(true);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const term = searchTerm.trim().toLowerCase();
+  const filtered = term
+    ? icd10List.filter(
+        (item) =>
+          item.code.toLowerCase().includes(term) ||
+          item.display.toLowerCase().includes(term)
+      ).slice(0, 50)
+    : icd10List.slice(0, 50);
+
   return (
-    <div style={{ marginTop: '8px' }}>
-      <label style={{ fontSize: '12px', fontWeight: 'bold' }}>Pilih Diagnosa Primer (ICD-10):</label>
+    <div>
+      <div style={{ position: 'relative', marginBottom: '8px' }}>
+        <i
+          className="fas fa-search"
+          style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '13px' }}
+        />
+        <input
+          type="text"
+          placeholder={loading ? 'Memuat daftar ICD-10...' : `Cari dari ${icd10List.length} kode ICD-10 (kode atau nama penyakit)...`}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="input-bright"
+          style={{ paddingLeft: '34px' }}
+          disabled={loading || loadError}
+        />
+      </div>
+
+      {loadError && (
+        <div style={{ color: '#be123c', fontSize: '12px', marginBottom: '8px' }}>
+          <i className="fas fa-exclamation-circle" /> Gagal memuat daftar ICD-10 dari /icd10.json.
+        </div>
+      )}
+
       <select
+        value={value || ''}
         onChange={(e) => {
-          const item = COMMON_ICD10.find((x) => x.code === e.target.value);
+          const item = icd10List.find((x) => x.code === e.target.value);
           if (item) onSelect(item);
         }}
-        defaultValue=""
-        style={{ width: '100%', padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ccc' }}
+        className="input-bright"
+        style={{ cursor: 'pointer', fontWeight: '500' }}
+        disabled={loading || loadError}
+        size={term ? Math.min(Math.max(filtered.length, 1), 8) : undefined}
       >
-        <option value="" disabled>-- Pilih Diagnosa ICD-10 --</option>
-        {COMMON_ICD10.map((d) => (
+        <option value="" disabled>
+          {loading ? 'Memuat...' : '-- Pilih Diagnosa ICD-10 --'}
+        </option>
+        {filtered.map((d) => (
           <option key={d.code} value={d.code}>
-            {d.code} - {d.display}
+            {d.code} — {d.display}
           </option>
         ))}
       </select>
+
+      {term && filtered.length === 0 && !loading && (
+        <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '6px' }}>Tidak ada kode ICD-10 yang cocok.</div>
+      )}
     </div>
   );
 }
